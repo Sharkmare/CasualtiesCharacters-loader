@@ -49,6 +49,7 @@ namespace CasualtiesCharacters.Tests
             IdAllocatorTests.Register(suite);
             SkinMatcherTests.Register(suite);
             TraitMathTests.Register(suite);
+            CatalogTests.Register(suite);
             return suite.RunAll();
         }
     }
