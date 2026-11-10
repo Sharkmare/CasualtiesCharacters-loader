@@ -22,17 +22,21 @@ VERSION = "9.9.9"
 
 
 ALLOWED_LINK = "https://github.com/Sharkmare/casualties-together"
+AVALI_LINK = "https://github.com/Sharkmare/CU-Character-Avali"
+ALLOWED_URLS = (ALLOWED_LINK, AVALI_LINK)
 LICENCE_WORDING = r"licen[cs]e|reuse"
 
 
 def foreign_repository_text(text):
-    without_allowed = re.sub(re.escape(ALLOWED_LINK) + r"(?![\w/.-])", "", text)
+    without_allowed = text
+    for link in ALLOWED_URLS:
+        without_allowed = re.sub(re.escape(link) + r"(?![\w/.-])", "", without_allowed)
     return re.findall(r"github[^\s]*", without_allowed, flags=re.IGNORECASE)
 
 
 def unexpected_urls(text):
     found = [url.rstrip(".,;)") for url in re.findall(r"https?://[^\s`\"']+", text)]
-    return [url for url in found if url != ALLOWED_LINK]
+    return [url for url in found if url not in ALLOWED_URLS]
 
 
 def licence_wording(text):
@@ -187,6 +191,8 @@ class PackageTests(unittest.TestCase):
         for text in texts:
             self.assertEqual([], unexpected_urls(text))
         self.assertEqual(["https://example.com/x"], unexpected_urls("see https://example.com/x, thanks"))
+        self.assertEqual([], unexpected_urls("a %s and %s." % (ALLOWED_LINK, AVALI_LINK)))
+        self.assertEqual([AVALI_LINK + "-old"], unexpected_urls("x " + AVALI_LINK + "-old"))
 
     def test_no_licence_or_reuse_wording_ships(self):
         with open(os.path.join(package.ROOT, "README.md"), encoding="utf-8") as handle:
@@ -199,6 +205,29 @@ class PackageTests(unittest.TestCase):
         self.assertTrue(licence_wording("the portal states no reuse licence"))
         self.assertTrue(licence_wording("License: MIT"))
         self.assertEqual([], licence_wording("Skin by paili16"))
+
+    def test_each_allowed_url_appears_only_where_intended(self):
+        with open(os.path.join(package.ROOT, "README.md"), encoding="utf-8") as handle:
+            readme = handle.read()
+        install = self.entries[package.INSTALL_ENTRY].decode("utf-8")
+        credits = self.entries[package.CREDITS_ENTRY].decode("utf-8")
+        for link in ALLOWED_URLS:
+            self.assertEqual(1, install.count(link), "install " + link)
+            self.assertEqual(1, readme.count(link), "readme " + link)
+            self.assertEqual(0, credits.count(link), "credits " + link)
+
+    def test_example_characters_are_listed_in_install_text_and_readme_and_none_ships(self):
+        with open(os.path.join(package.ROOT, "README.md"), encoding="utf-8") as handle:
+            readme = handle.read()
+        install = self.entries[package.INSTALL_ENTRY].decode("utf-8")
+        self.assertIn("Example characters", install)
+        self.assertIn("## Example characters", readme)
+        for name, pack, link, description in package.EXAMPLE_CHARACTERS:
+            for text in (install, readme):
+                self.assertIn(name, text)
+                self.assertIn(pack, text)
+                self.assertIn(link, text)
+        self.assertEqual({package.INSTALL_ENTRY, package.PLUGIN_ENTRY, package.CREDITS_ENTRY}, set(self.entries))
 
     def test_the_link_checker_can_fail(self):
         self.assertEqual([], foreign_repository_text("see " + ALLOWED_LINK + " only"))
@@ -216,7 +245,7 @@ class PackageTests(unittest.TestCase):
         finally:
             package.TOGETHER_URL = original
         self.assertNotIn("built from the source", text)
-        self.assertNotIn("github", text.lower())
+        self.assertNotIn("casualties-together", text.lower())
         self.assertIn("based on version %s" % package.TOGETHER_BASE_VERSION, text)
         self.assertNotIn("Download", text)
 

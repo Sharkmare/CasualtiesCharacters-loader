@@ -4,6 +4,7 @@ from pathlib import Path
 
 REPOSITORY = Path(__file__).resolve().parent.parent
 CORE_TESTS = REPOSITORY / "tests" / "CoreTests"
+PACKAGE_TESTS = "tests/package"
 
 MUTATIONS = [
     ("src/Core/IdAllocator.cs", ".OrderBy(d => d.FullKey, StringComparer.Ordinal).ToList();", ".ToList();", "ids depend on input order"),
@@ -16,6 +17,18 @@ MUTATIONS = [
     ("src/Core/Definition.cs", 'System.IO.Path.Combine(SourceFolder, "skins", SkinFolder)', 'System.IO.Path.Combine("skins", SkinFolder)', "skin folders not namespaced by pack"),
 ]
 
+PACKAGE_MUTATIONS = [
+    ("tools/build_package.py", '"https://github.com/Sharkmare/CU-Character-Avali"', '"https://github.com/Sharkmare/CU-Character-Avali-old"', "example link points elsewhere"),
+    ("tools/build_package.py", 'TOGETHER_URL = "https://github.com/Sharkmare/casualties-together"', 'TOGETHER_URL = "https://github.com/Sharkmare/other"', "Together link points elsewhere"),
+    ("tools/build_package.py", "Example characters\n{examples}\n\n", "", "install text lists no examples"),
+]
+
+
+def run_package_tests():
+    result = subprocess.run([sys.executable, "-W", "ignore", "-I", "-m", "unittest", "discover", "-s", PACKAGE_TESTS],
+                            cwd=str(REPOSITORY), capture_output=True, text=True)
+    return result.returncode, [line for line in result.stderr.splitlines() if line.startswith("FAIL")]
+
 
 def run_tests():
     result = subprocess.run(["dotnet", "run", "-c", "Release"], cwd=str(CORE_TESTS), capture_output=True, text=True)
@@ -24,7 +37,8 @@ def run_tests():
 
 def main():
     survivors = 0
-    for relative, original, mutant, label in MUTATIONS:
+    work = [(m, run_tests) for m in MUTATIONS] + [(m, run_package_tests) for m in PACKAGE_MUTATIONS]
+    for (relative, original, mutant, label), runner in work:
         path = REPOSITORY / relative
         source = path.read_text(encoding="utf-8")
         if source.count(original) != 1:
@@ -32,7 +46,7 @@ def main():
             return 2
         try:
             path.write_text(source.replace(original, mutant), encoding="utf-8", newline="\n")
-            code, failures = run_tests()
+            code, failures = runner()
         finally:
             path.write_text(source, encoding="utf-8", newline="\n")
         status = "caught by %d test(s)" % len(failures) if code != 0 else "SURVIVED"

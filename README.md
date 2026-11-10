@@ -56,6 +56,10 @@ A skin may be a downloaded portal zip's `Body` folder. Parts that are missing ke
 
 Each character's slot is worked out from its pack id and key alone, so two machines with the same packs agree on every slot, in any install or load order, and removing a pack leaves the others where they were unless they had shared a slot with it. If two characters ask for the same slot, the one whose `<pack id>/<key>` sorts first keeps it and the other gets the slot its key points to, or the next free one. The log lists every character with its slot and a table fingerprint built from pack ids, pack versions, keys and slots; equal packs give equal fingerprints. If a pack is installed twice the newer copy is used, a pack that needs a newer loader is skipped, and a pack that fails to load is skipped without affecting the others.
 
+## Example characters
+
+- **Avary (Avali)**, pack `CasualtiesCharacters-Avali`: a species character with its own skin and traits, for singleplayer and for multiplayer on a Together build with extra character support (https://github.com/Sharkmare/CU-Character-Avali).
+
 ## Known limitations
 
 - The new menu buttons are placed by copying the last game character's button, so their position and portrait may look rough.

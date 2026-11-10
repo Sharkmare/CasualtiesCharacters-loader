@@ -26,6 +26,10 @@ TOGETHER_BASE_VERSION = "5.4.1"
 TOGETHER_MIN_COMMIT = "23d8cd2"
 TOGETHER_URL = "https://github.com/Sharkmare/casualties-together"
 AUTHOR = ""
+EXAMPLE_CHARACTERS = [
+    ("Avary (Avali)", "CasualtiesCharacters-Avali", "https://github.com/Sharkmare/CU-Character-Avali",
+     "a species character with its own skin and traits, for singleplayer and for multiplayer on a Together build with extra character support"),
+]
 LICENSE_NAME = ""
 
 INSTALL_TEMPLATE = """{product} {version}
@@ -62,6 +66,9 @@ fingerprints. A pack that fails to load is skipped and the others still load.
 To make a pack, see README.md. Logging is quiet by default; the plugin's .cfg file in
 BepInEx\\config has a Debug option. The plugin makes no network connections.
 
+Example characters
+{examples}
+
 Known limitations
 - The new menu buttons are placed by copying the last game character's button, so their position and portrait may look rough.
 - Custom stats and perks are not shown on screen.
@@ -81,6 +88,10 @@ def together_requirement(singleplayer_note):
     return text + "\n  " + singleplayer_note
 
 
+def examples_text():
+    return "\n".join("- %s, pack %s: %s.\n  %s" % (name, pack, description, link) for name, pack, link, description in EXAMPLE_CHARACTERS)
+
+
 def credits_text():
     lines = []
     if AUTHOR:
@@ -93,7 +104,7 @@ def credits_text():
 
 def install_text(version):
     return INSTALL_TEMPLATE.format(product=PRODUCT_NAME, version=version, bepinex=BEPINEX_VERSION,
-                                   together_requirement=together_requirement("Singleplayer works with the loader alone. With any other Together build the characters are not\n  available in multiplayer and everything else stays vanilla."), credits=credits_text())
+                                   examples=examples_text(), together_requirement=together_requirement("Singleplayer works with the loader alone. With any other Together build the characters are not\n  available in multiplayer and everything else stays vanilla."), credits=credits_text())
 
 
 def read_version(plugin_source=PLUGIN_SOURCE):
