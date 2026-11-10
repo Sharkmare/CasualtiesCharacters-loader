@@ -46,6 +46,7 @@ namespace CasualtiesCharacters.Tests
             TestSuite suite = new TestSuite();
             ParserTests.Register(suite);
             RuleTests.Register(suite);
+            IdAllocatorTests.Register(suite);
             SkinMatcherTests.Register(suite);
             TraitMathTests.Register(suite);
             return suite.RunAll();
