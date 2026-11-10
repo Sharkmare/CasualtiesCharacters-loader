@@ -45,6 +45,7 @@ namespace CasualtiesCharacters.Tests
         {
             TestSuite suite = new TestSuite();
             ParserTests.Register(suite);
+            RuleTests.Register(suite);
             return suite.RunAll();
         }
     }
