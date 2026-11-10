@@ -1,0 +1,10 @@
+bin/
+obj/
+__pycache__/
+*.pyc
+.state/
+.game.lock
+dist/
+.refs/
+tests/**/bin/
+tests/**/obj/
