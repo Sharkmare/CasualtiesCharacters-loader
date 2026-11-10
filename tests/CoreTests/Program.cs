@@ -47,6 +47,7 @@ namespace CasualtiesCharacters.Tests
             ParserTests.Register(suite);
             RuleTests.Register(suite);
             SkinMatcherTests.Register(suite);
+            TraitMathTests.Register(suite);
             return suite.RunAll();
         }
     }
