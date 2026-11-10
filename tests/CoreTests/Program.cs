@@ -50,6 +50,7 @@ namespace CasualtiesCharacters.Tests
             SkinMatcherTests.Register(suite);
             TraitMathTests.Register(suite);
             CatalogTests.Register(suite);
+            MultiplayerPolicyTests.Register(suite);
             return suite.RunAll();
         }
     }
