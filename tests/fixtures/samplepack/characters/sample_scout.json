@@ -1,0 +1,108 @@
+{
+  "key": "scout",
+  "base": "experiment",
+  "unlock": "always",
+  "name": {
+    "en": "Scout"
+  },
+  "family": {
+    "en": "A sample character that only clones the Experiment body and changes numbers."
+  },
+  "quote": {
+    "en": "Ready."
+  },
+  "quirks": {
+    "en": "[SAMPLE]"
+  },
+  "skills": [
+    5,
+    6,
+    11
+  ],
+  "multipliers": [
+    0.8,
+    0.8,
+    1.25
+  ],
+  "numbers": {
+    "insulationMult": 1.6,
+    "heatThirstMult": 1.8,
+    "heatThreshold": 37.5,
+    "hungerRateMult": 1.3,
+    "thirstRateMult": 1.15,
+    "moveForceMult": 1.1,
+    "staminaGainMult": 1.15,
+    "carryMult": 0.75,
+    "painGainMult": 1.25,
+    "bleedGainMult": 1.2,
+    "hearingLossGainMult": 1.5
+  },
+  "flags": {
+    "canSweat": false
+  },
+  "stats": {
+    "charge": {
+      "min": 0,
+      "max": 100,
+      "start": 0,
+      "perSecond": 0.05,
+      "label": {
+        "en": "Charge"
+      }
+    }
+  },
+  "perks": [
+    {
+      "id": "boosted",
+      "name": {
+        "en": "Boosted"
+      },
+      "desc": {
+        "en": "Warmer for a while."
+      },
+      "active": false,
+      "duration": 600,
+      "effects": {
+        "insulationMult": 0.3
+      }
+    }
+  ],
+  "behaviours": [
+    {
+      "on": "wake",
+      "when": [
+        {
+          "path": "stat.charge",
+          "op": ">=",
+          "value": 100
+        }
+      ],
+      "do": [
+        {
+          "set": "stat.charge",
+          "value": 0
+        },
+        {
+          "grant": "boosted"
+        }
+      ]
+    },
+    {
+      "on": "tick",
+      "when": [
+        {
+          "path": "body.temperature",
+          "op": ">",
+          "value": 38
+        }
+      ],
+      "do": [
+        {
+          "add": "body.stamina",
+          "value": -0.4,
+          "perSecond": true
+        }
+      ]
+    }
+  ]
+}
