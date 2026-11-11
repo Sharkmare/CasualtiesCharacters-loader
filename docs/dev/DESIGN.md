@@ -95,7 +95,7 @@ JSON holds `skills`, `multipliers`, `numbers` (named floats) and `flags` (named 
 | `moveForceMult` | number | `Body.moveForce` set once at spawn from the base value | `Body.cs:90, 612` |
 | `staminaGainMult` | number | `Body.staminaGainMultiplier` | `Body.cs:552, 3553` |
 | `carryMult` | number | `Body.maxEncumberance` scaled in a `Body.Update` postfix, after the game's write at `4282` | `Body.cs:307, 4282` |
-| `painGainMult`, `bleedGainMult` | number | per-limb `Limb.pain` and `Limb.bleedAmount` gains damped or amplified frame to frame (the same method as Together's `Body_Update_DuneHardyPatch`, which the loader reimplements, not references) | `Limb.cs:73, 78` |
+| `painGainMult`, `bleedGainMult` | number | per-limb `Limb.pain` and `Limb.bleedAmount` gains damped or amplified frame to frame (the loader's own method, `TraitMath.DampenGain`) | `Limb.cs:73, 78` |
 | `hearingLossGainMult` | number | `Body.hearingLoss` gain scaled the same way | `Body.cs:317` |
 | `heatThirstMult` | number | extra thirst drain while `Body.temperature` is above `heatThreshold` (default 37.5, the sweat threshold at `Body.cs:3987`) | `Body.cs:193, 3987` |
 | `canSweat` | flag | `Body.canSweat` | `Body.cs:538` |
@@ -127,7 +127,7 @@ Placeholder skin idea: a recolour of the Experiment parts, read from a local ins
 What the fork does today (`C:\Hive\casualties-together`, commits `f2369ec`, `5f20394`, `48260f7`):
 
 - `SyncBody.characterSelected` is a `SyncVar<byte>`, encoded `type + 1` (`CharacterChoice.Encode`, `Net/ScavLiteEntitySystem.cs:138`); 0 is unset.
-- `CharacterChoice.TryDecode` rejects any value above `DuneTuning.HighestCharacter`, a `const byte 2` (`Extras/DuneTuning.cs:16`). The client report `SERVER_ReportCharacter` is rejected above that too (`Extras/DuneSupport.cs:45, 62, 71`).
+- `CharacterChoice.TryDecode` rejected any value above a constant highest character id of 2, and the client report `SERVER_ReportCharacter` was rejected above that too (before the registration hook existed).
 - A remote body is built from `CharacterPrefabs.For(type)`, which indexes a three-entry table and otherwise falls back to `ServerMain.CHARACTER_PREFAB` (`Extras/CharacterPrefabs.cs`, `Content/NetBody.cs:1138-1150`). `ApplyBeforeAwake` and `ApplyToLiveBody` write the id straight to `Body.charType` (`DuneSupport.cs:7-26`).
 - A client with an id it cannot decode uses the default prefab and does not throw. That is the safe fallback for a client without the loader.
 
