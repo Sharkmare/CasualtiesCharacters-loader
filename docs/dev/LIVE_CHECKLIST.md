@@ -19,7 +19,7 @@ Everything here needs a running game and has not been executed. Install the load
 5. Save and load: the character comes back as itself; with its pack removed it does not crash.
 6. Size mod: a size command still scales the character and keeps its traits.
 
-## Multiplayer on the fork build (Together 5.4.1-dune.3 or newer), registration
+## Multiplayer on the fork build (Together built from the `characters` branch), registration
 
 1. Both logs show `Together registration of <slot> ok` for every character and equal fingerprints.
 2. The join screen Character button cycles game characters then pack characters in slot order.

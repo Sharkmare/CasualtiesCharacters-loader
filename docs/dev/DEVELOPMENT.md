@@ -8,7 +8,7 @@ Design and source citations: `DESIGN.md`. What needs a running game and has not 
 dotnet build -c Release src/Plugin
 ```
 
-Needs the game install (`GameDir`, default the Steam path) for the game, BepInEx and Newtonsoft assemblies, and `.refs/Together/` holding `CasualtiesMP.dll`, `LiteNetLib.dll` and `LiteEntitySystem.dll` from a Together 5.4.1-dune.3 package (`TogetherDir` overrides the path). `.refs` is not in the repository. The build writes no debug symbols so the binary carries no local paths. The loader version is the `Version` constant in `src/Plugin/Plugin.cs`; packs name the oldest loader they accept in `pack.json`.
+Needs the game install (`GameDir`, default the Steam path) for the game, BepInEx and Newtonsoft assemblies, and `.refs/Together/` holding `CasualtiesMP.dll`, `LiteNetLib.dll` and `LiteEntitySystem.dll` from a build of the `characters` branch of the Together source (`TogetherDir` overrides the path). `.refs` is not in the repository. The build writes no debug symbols so the binary carries no local paths. The loader version is the `Version` constant in `src/Plugin/Plugin.cs`; packs name the oldest loader they accept in `pack.json`.
 
 ## Test (offline, no game launch)
 

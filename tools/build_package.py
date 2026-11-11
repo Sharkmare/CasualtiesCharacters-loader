@@ -22,9 +22,8 @@ ZIP_TIMESTAMP = (2026, 1, 1, 0, 0, 0)
 PRODUCT_NAME = "CasualtiesCharacters"
 BEPINEX_VERSION = "5.4.23.5"
 TOGETHER_NAME = "Together co-op build with extra character support"
-TOGETHER_BASE_VERSION = "5.4.1"
-TOGETHER_MIN_COMMIT = "23d8cd2"
-TOGETHER_URL = "https://github.com/Sharkmare/casualties-together"
+TOGETHER_BRANCH = "characters"
+TOGETHER_URL = "https://github.com/Sharkmare/casualties-together/tree/characters"
 AUTHOR = ""
 EXAMPLE_CHARACTERS = [
     ("Avary (Avali)", "CasualtiesCharacters-Avali", "https://github.com/Sharkmare/CU-Character-Avali",
@@ -81,10 +80,10 @@ Known limitations
 def together_requirement(singleplayer_note):
     if TOGETHER_URL:
         text = ("- For multiplayer: a %s, built from the source at %s\n"
-                "  (main branch, commit %s or later; the repository's version number reads %s, so go by the commit;\n"
-                "  see the Building section of its README), installed by every player") % (TOGETHER_NAME, TOGETHER_URL, TOGETHER_MIN_COMMIT, TOGETHER_BASE_VERSION)
+                "  (the %s branch is the one with the extra character support; see the Building section of its README),\n"
+                "  installed by every player") % (TOGETHER_NAME, TOGETHER_URL, TOGETHER_BRANCH)
     else:
-        text = "- For multiplayer: a %s (based on version %s), installed by every player" % (TOGETHER_NAME, TOGETHER_BASE_VERSION)
+        text = "- For multiplayer: a %s, installed by every player" % TOGETHER_NAME
     return text + "\n  " + singleplayer_note
 
 

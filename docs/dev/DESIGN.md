@@ -124,7 +124,7 @@ Placeholder skin idea: a recolour of the Experiment parts, read from a local ins
 
 ## Multiplayer through Together
 
-What the fork does today (`C:\Hive\casualties-together`, commits `f2369ec`, `5f20394`, `48260f7`):
+What the fork did before the registration hook existed (read from its character choice, prefab table and apply code):
 
 - `SyncBody.characterSelected` is a `SyncVar<byte>`, encoded `type + 1` (`CharacterChoice.Encode`, `Net/ScavLiteEntitySystem.cs:138`); 0 is unset.
 - `CharacterChoice.TryDecode` rejected any value above a constant highest character id of 2, and the client report `SERVER_ReportCharacter` was rejected above that too (before the registration hook existed).
@@ -192,7 +192,7 @@ This section is the current state; where it differs from the text above, this wi
 
 - Slot 3 is requested by the Avary character in the Avali pack (`"id": 3`); the slot rules are in the next section.
 - Perk `effects` are added to the character's base number (`Trait(name, neutral)` in `CustomCharacter.cs`); a perk with `duration` switches itself off after that many seconds.
-- Together: the registration hook exists as `Together.TogetherCharacters` (package 5.4.1-dune.3): `Register(byte id, string displayName, byte baseCharacter)`, events `BodyBuilt(Body, byte, ScavPlayer)` and `CharacterChanged(ScavPlayer, byte, byte)`, `TableFingerprint`. The bridge in `ForkBridge.cs` uses it and is only touched when the `CasualtiesMP` plugin is loaded. The five-item gap list above is therefore closed; Together builds the body from the base prefab, and this plugin's `PlayerCamera.SpawnCharacter` patch does the same in singleplayer.
+- Together: the registration hook exists as `Together.TogetherCharacters` (the `characters` branch of the Together source): `Register(byte id, string displayName, byte baseCharacter)`, events `BodyBuilt(Body, byte, ScavPlayer)` and `CharacterChanged(ScavPlayer, byte, byte)`, `TableFingerprint`. The bridge in `ForkBridge.cs` uses it and is only touched when the `CasualtiesMP` plugin is loaded. The five-item gap list above is therefore closed; Together builds the body from the base prefab, and this plugin's `PlayerCamera.SpawnCharacter` patch does the same in singleplayer.
 - A postfix on `Skills.Setup` re-applies a custom character's skills when Together resets skills on respawn (`Util.Body_ResetSkills` calls `Setup(charType)` with the base id).
 - Only `unlock: always` is enforced. `afterBase` is parsed and ignored.
 - Only the local player's body runs rules, stat drift, gain damping and the carry limit (`CustomCharacter.IsLocal`); insulation, hunger and thirst patches act on any body that has the component, which is harmless on remote bodies because those fields are not simulated there.

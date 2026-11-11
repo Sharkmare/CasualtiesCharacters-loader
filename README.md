@@ -5,7 +5,7 @@ A loader for character packs in Casualties: Unknown. Packs define playable chara
 ## Requirements
 
 - Casualties: Unknown with BepInEx 5.4.23.5
-- For multiplayer: a Together co-op build with extra character support, built from the source at https://github.com/Sharkmare/casualties-together (main branch, commit 23d8cd2 or later; the repository's version number reads 5.4.1, so go by the commit; its README has a Building section), installed by every player. No prebuilt download is offered.
+- For multiplayer: a Together co-op build with extra character support, built from the source at https://github.com/Sharkmare/casualties-together/tree/characters (the characters branch is the one with the extra character support; its README has a Building section), installed by every player. No prebuilt download is offered.
 - Singleplayer works with the loader alone. On any other Together build the characters are not available in multiplayer and everything else stays vanilla: the loader sends no messages and changes nothing there.
 - Every player in a multiplayer game needs the loader and the same packs. A player without them sees the character as an Experiment and nothing breaks.
 

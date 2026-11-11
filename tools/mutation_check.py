@@ -19,7 +19,8 @@ MUTATIONS = [
 
 PACKAGE_MUTATIONS = [
     ("tools/build_package.py", '"https://github.com/Sharkmare/CU-Character-Avali"', '"https://github.com/Sharkmare/CU-Character-Avali-old"', "example link points elsewhere"),
-    ("tools/build_package.py", 'TOGETHER_URL = "https://github.com/Sharkmare/casualties-together"', 'TOGETHER_URL = "https://github.com/Sharkmare/other"', "Together link points elsewhere"),
+    ("tools/build_package.py", 'TOGETHER_URL = "https://github.com/Sharkmare/casualties-together/tree/characters"', 'TOGETHER_URL = "https://github.com/Sharkmare/other"', "Together link points elsewhere"),
+    ("tools/build_package.py", 'TOGETHER_URL = "https://github.com/Sharkmare/casualties-together/tree/characters"', 'TOGETHER_URL = "https://github.com/Sharkmare/casualties-together/tree/main"', "Together link names the wrong branch"),
     ("tools/build_package.py", "Example characters\n{examples}\n\n", "", "install text lists no examples"),
 ]
 

@@ -21,7 +21,8 @@ EXPECTED_ENTRIES = {package.INSTALL_ENTRY, package.PLUGIN_ENTRY, package.CREDITS
 VERSION = "9.9.9"
 
 
-ALLOWED_LINK = "https://github.com/Sharkmare/casualties-together"
+TOGETHER_BASE_LINK = "https://github.com/Sharkmare/casualties-together"
+ALLOWED_LINK = TOGETHER_BASE_LINK + "/tree/characters"
 AVALI_LINK = "https://github.com/Sharkmare/CU-Character-Avali"
 ALLOWED_URLS = (ALLOWED_LINK, AVALI_LINK)
 LICENCE_WORDING = r"licen[cs]e|reuse"
@@ -143,7 +144,7 @@ class PackageTests(unittest.TestCase):
         text = self.entries[package.INSTALL_ENTRY].decode("utf-8").replace("\r\n", "\n")
         for needle in ("CasualtiesCharacters 9.9.9", "BepInEx " + package.BEPINEX_VERSION,
                        "a %s, built from the source at %s" % (package.TOGETHER_NAME, ALLOWED_LINK),
-                       "commit %s or later; the repository's version number reads %s, so go by the commit" % (package.TOGETHER_MIN_COMMIT, package.TOGETHER_BASE_VERSION),
+                       "the %s branch is the one with the extra character support" % package.TOGETHER_BRANCH,
                        "Building section", "installed by every player",
                        "loader only", "pack.json", "Install", "Use", "Known limitations", "Credits",
                        "Singleplayer works with the loader alone", "any other Together build the characters are not\n  available in multiplayer and everything else stays vanilla"):
@@ -179,7 +180,7 @@ class PackageTests(unittest.TestCase):
             self.assertEqual([], build_suffixes(text))
 
     def test_the_suffix_checker_can_fail(self):
-        self.assertEqual([], build_suffixes("version 5.4.1 and loader 0.2.0 and commit 23d8cd2"))
+        self.assertEqual([], build_suffixes("version 5.4.1 and loader 0.2.0"))
         self.assertTrue(build_suffixes("version 5.4.1+1"))
         self.assertTrue(build_suffixes("5.4.1+23"))
         self.assertTrue(build_suffixes("build 7+2 or later"))
@@ -236,6 +237,8 @@ class PackageTests(unittest.TestCase):
         self.assertTrue(foreign_repository_text(ALLOWED_LINK + "-fork and https://github.com/x/y"))
         self.assertTrue(foreign_repository_text(ALLOWED_LINK + "-fork"))
         self.assertTrue(foreign_repository_text(ALLOWED_LINK + "/releases"))
+        self.assertTrue(foreign_repository_text(TOGETHER_BASE_LINK + "/tree/main"))
+        self.assertTrue(foreign_repository_text(TOGETHER_BASE_LINK))
 
     def test_the_link_line_is_omitted_when_the_constant_is_empty(self):
         original = package.TOGETHER_URL
@@ -246,7 +249,8 @@ class PackageTests(unittest.TestCase):
             package.TOGETHER_URL = original
         self.assertNotIn("built from the source", text)
         self.assertNotIn("casualties-together", text.lower())
-        self.assertIn("based on version %s" % package.TOGETHER_BASE_VERSION, text)
+        self.assertIn("installed by every player", text)
+        self.assertNotIn("branch", text)
         self.assertNotIn("Download", text)
 
     def test_author_and_licence_lines_are_omitted_until_set(self):
